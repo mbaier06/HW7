@@ -67,7 +67,7 @@ firebase.auth().onAuthStateChanged(async function(user) {
     // Initializes FirebaseUI Auth
     let ui = new firebaseui.auth.AuthUI(firebase.auth())
 
-    // FirebaseUI configuration
+    // FirebaseUI configuration to give log-in UI
     let authUIConfig = {
       signInOptions: [
         firebase.auth.EmailAuthProvider.PROVIDER_ID
@@ -75,7 +75,7 @@ firebase.auth().onAuthStateChanged(async function(user) {
       signInSuccessUrl: 'movies.html'
     }
 
-    // Starts FirebaseUI Auth
+    // Starts FirebaseUI Auth and shows log-in UI
     ui.start('.sign-in-or-sign-out', authUIConfig)
   }
 })
@@ -88,7 +88,7 @@ firebase.auth().onAuthStateChanged(async function(user) {
 // Step 1: Add your Firebase configuration to movies.html, along with the
 //         (provided) script tags for all necessary Firebase services – i.e. Firebase
 //         Auth, Firebase Cloud Firestore, and Firebase UI for Auth; also
-//         add the CSS file for FirebaseUI for Auth.  --> DONE IN HTML FILE
+//         add the CSS file for FirebaseUI for Auth. 
 // Step 2: Change the main event listener from DOMContentLoaded to 
 //         firebase.auth().onAuthStateChanged and include conditional logic 
 //         shows a login UI when signed, and the list of movies when signed
