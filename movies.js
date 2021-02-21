@@ -25,28 +25,38 @@ firebase.auth().onAuthStateChanged(async function(user) {
     let json = await response.json()
     let movies = json.results
     console.log(movies)
+
+    let currentUser = firebase.auth().currentUser
+    let userId = currentUser.uid
     
     for (let i=0; i<movies.length; i++) {
       let movie = movies[i]
-      let docRef = await db.collection('watched').doc(`${movie.id}`).get()
-      let watchedMovie = docRef.data()
+      let movieId = movie.id
+      //Part of Step 3: Querying Firebase DB for existing docs (using id attribute) & setting opacity for pre-clicked movies
+      let querySnapshot = await db.collection('watched').where('id', '==', `${movieId}-${userId}`).get()
+      let watchedMovies = querySnapshot.docs
+      // console.log(watchedMovies)
       let opacityClass = ''
-      if (watchedMovie) {
-        opacityClass = 'opacity-20'
-      }
+      if (watchedMovies.length == 1) {
+        opacityClass = 'opacity-20' 
+      } else {}
 
       document.querySelector('.movies').insertAdjacentHTML('beforeend', `
-        <div class="w-1/5 p-4 movie-${movie.id} ${opacityClass}">
+        <div class="w-1/5 p-4 movie-${movieId} ${opacityClass}">
           <img src="https://image.tmdb.org/t/p/w500${movie.poster_path}" class="w-full">
           <a href="#" class="watched-button block text-center text-white bg-green-500 mt-4 px-4 py-2 rounded">I've watched this!</a>
         </div>
       `)
 
-      document.querySelector(`.movie-${movie.id}`).addEventListener('click', async function(event) {
+      document.querySelector(`.movie-${movieId}`).addEventListener('click', async function(event) {
         event.preventDefault()
-        let movieElement = document.querySelector(`.movie-${movie.id}`)
+        let movieElement = document.querySelector(`.movie-${movieId}`)
+        //Part of Step 3: Setting opacity for new clicks
         movieElement.classList.add('opacity-20')
-        await db.collection('watched').doc(`${movie.id}`).set({})
+        //Part of Step 3: Creating a Firebase doc with doc ID = movieId-userID & populating a doc attribute w/ those values
+        await db.collection('watched').doc(`${movieId}-${userId}`).set({
+          id: `${movieId}-${userId}`
+        })
       }) 
     }
   } else {
