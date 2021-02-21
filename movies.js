@@ -63,6 +63,7 @@ firebase.auth().onAuthStateChanged(async function(user) {
     // Signed out
     console.log('signed out')
 
+    // Part of Step 2:
     // Initializes FirebaseUI Auth
     let ui = new firebaseui.auth.AuthUI(firebase.auth())
 
